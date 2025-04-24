@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Save Monument Game - Mission</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&family=Special+Elite&display=swap');
+
+        :root {
+            --cream-bg: #f5e8d1;
+            --dark-brown: #654321;
+            --title-color: #8b4513;
+            --highlight-color: #d2691e;
+            --agent-bg: rgba(0, 0, 0, 0.8);
+            --email-bg: #f0f0f0;
+            --email-header: #e0e0e0;
+            --typing-color: #2c3e50;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body,
+        html {
+            height: 100%;
+            width: 100%;
+            font-family: 'Roboto', sans-serif;
+            overflow: hidden;
+        }
+
+        .background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://hebbkx1anhila5yf.public.blob.vercel-storage.com/IG-97O7hywlsyH1HDYaPo5c5y8TVesbbO.jpeg');
+            background-size: cover;
+            background-position: center;
+            filter: blur(40px);
+            z-index: -1;
+            transition: filter 1.5s ease;
+        }
+
+        .game-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            perspective: 1000px;
+        }
+
+        .game-box {
+            background-color: var(--cream-bg);
+            border: 12px solid var(--dark-brown);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            width: 95%;
+            max-width: 1000px;
+            height: 90vh;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transition: opacity 1s ease, transform 1s ease;
+        }
+
+        .game-title {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--title-color);
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            letter-spacing: 1px;
+        }
+
+        .content-wrapper {
+            display: flex;
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .agent-container {
+            width: 350px;
+            height: 400px;
+            
+        }
+
+        .agent-image {
+            width: 350px;
+            height: 450px;
+            
+        }
+
+        .right-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            overflow: hidden;
+            padding-left: 20px;
+        }
+
+        .message-container {
+            background-color: var(--agent-bg);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            width: 100%;
+            min-height: 80px;
+            max-height: 150px;
+            font-family: 'Special Elite', cursive;
+            position: relative;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            margin-bottom: 20px;
+            overflow-y: auto;
+        }
+
+        .message-container:after {
+            content: '';
+            position: absolute;
+            left: -20px;
+            top: 30px;
+            border: 10px solid transparent;
+            border-right-color: var(--agent-bg);
+        }
+
+        .message-text {
+            display: inline;
+            font-size: 1.1rem;
+            line-height: 1.5;
+        }
+
+        .desktop-container {
+            background-color: #333;
+            border-radius: 8px;
+            padding: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            display: none;
+            flex: 1;
+            max-height: 400px;
+            overflow: hidden;
+        }
+
+        .email-window {
+            background-color: var(--email-bg);
+            border-radius: 8px;
+            height: 100%;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .email-header {
+            background-color: var(--email-header);
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .email-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 10px;
+            background-color: #ff6b6b;
+            border-radius: 50%;
+        }
+
+        .email-title {
+            font-weight: bold;
+        }
+
+        .email-content {
+            padding: 15px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: auto;
+        }
+
+        .email-info {
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+        }
+
+        .email-info span {
+            font-weight: bold;
+        }
+
+        .email-body {
+            background-color: white;
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            flex: 1;
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            overflow: auto;
+            white-space: pre-line;
+        }
+
+        .download-button {
+            display: inline-block;
+            background-color: var(--highlight-color);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            margin-top: 15px;
+            text-decoration: none;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .download-button:hover {
+            background-color: #c0561e;
+        }
+
+        .thumbs-up-container {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            z-index: 20;
+        }
+
+        .thumbs-up-btn {
+            background-color: var(--highlight-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 28px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .thumbs-up-btn:hover {
+            transform: scale(1.1);
+            background-color: #c0561e;
+        }
+
+        .popup-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .popup-box {
+            background-color: var(--cream-bg);
+            border: 6px solid var(--dark-brown);
+            border-radius: 15px;
+            padding: 30px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            transform: scale(0.8);
+            transition: transform 0.3s ease;
+        }
+
+        .popup-container.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .popup-container.active .popup-box {
+            transform: scale(1);
+        }
+
+        .popup-title {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--title-color);
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+
+        .popup-input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 2px solid var(--dark-brown);
+            border-radius: 8px;
+            font-size: 1rem;
+            text-align: center;
+        }
+
+        .popup-input:focus {
+            outline: none;
+            border-color: var(--highlight-color);
+            box-shadow: 0 0 10px rgba(210, 105, 30, 0.3);
+        }
+
+        .popup-button {
+            background-color: var(--highlight-color);
+            color: white;
+            padding: 12px 30px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .popup-button:hover {
+            background-color: #c0561e;
+            transform: scale(1.05);
+        }
+
+        .error-message {
+            color: #dc3545;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            min-height: 20px;
+        }
+
+        .photo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        .photo-image {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .thank-you-message {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: var(--cream-bg);
+            border: 4px solid var(--dark-brown);
+            border-radius: 10px;
+            padding: 15px 30px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            color: var(--dark-brown);
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 1s ease, transform 1s ease;
+            z-index: 50;
+        }
+
+        .thank-you-message.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Typing effect */
+        .typing::after {
+            content: '|';
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0;
+            }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .game-box {
+                padding: 15px;
+                height: 90vh;
+            }
+
+            .agent-container {
+                width: 180px;
+                height: 300px;
+            }
+
+            .right-content {
+                padding-left: 10px;
+            }
+
+            .thumbs-up-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 24px;
+            }
+
+            .game-title {
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .agent-container {
+                width: 120px;
+                height: 250px;
+            }
+
+            .message-text {
+                font-size: 0.9rem;
+            }
+
+            .thumbs-up-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 20px;
+            }
+
+            .game-title {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="background" id="background"></div>
+    <div class="game-container">
+        <div class="game-box" id="gameBox">
+            <h1 class="game-title">Operation: Monument Guardian</h1>
+
+            <div class="content-wrapper">
+                <!-- Agent image -->
+                <div class="agent-container" id="agentContainer">
+                    <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/An_detective_agent_cartoon_woman-removebg-preview%20%281%29-zoTDxPsQvzzzWXjw98MAK9noqYTcT6.png"
+                        alt="Agent" class="agent-image">
+                </div>
+
+                <!-- Right content (message and desktop) -->
+                <div class="right-content">
+                    <div class="message-container" id="welcomeMessage">
+                        <p class="message-text" id="welcomeText"></p>
+                    </div>
+
+                    <!-- Desktop with email -->
+                    <div class="desktop-container" id="desktopContainer">
+                        <div class="email-window">
+                            <div class="email-header">
+                                <div class="email-icon"></div>
+                                <div class="email-title" id="emailTitle">Intercepted Email</div>
+                            </div>
+                            <div class="email-content" id="emailc">
+                                <div class="email-info">
+                                    <p><span>From:</span> <span id="emailFrom"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="92e1f7f1e0f7e6d2f7fcf1e0ebe2e6f7f6bcf1fdff">[email&#160;protected]</a></span></p>
+                                    <p><span>To:</span> <span id="emailTo"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="8ae9e5e4feebe9fecae2e3eeeeefe4a4e5f8ed">[email&#160;protected]</a></span></p>
+                                    <p><span>Subject:</span> <span id="emailSubject">Upcoming Match</span></p>
+                                </div>
+                                <div class="email-body" id="emailBody">
+                                    Hello brother,
+
+                                    We are going to play a football match versus Delhi Warriors. Please be prepared for
+                                    it and keep the football size as large as possible.
+
+                                    Regards
+                                </div>
+                                <div id="downloadContainer" style="display: none;">
+                                    <button class="download-button" id="downloadButton">Download players.jpg</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="photoContainer" style="display: none; text-align: center;">
+                        <img src="photo.jpg" alt="Photo" style="width: 100%; height: auto;">
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Thumbs up button -->
+            <div class="thumbs-up-container" id="thumbsUpContainer">
+                <button class="thumbs-up-btn" id="thumbsUpBtn">👍</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Popup for answers -->
+    <div class="popup-container" id="popupContainer">
+        <div class="popup-box">
+            <h2 class="popup-title" id="popupTitle">Question</h2>
+            <div id="popupInputs">
+                <input type="text" id="popupInput" class="popup-input" placeholder="Enter your answer">
+            </div>
+            <div id="errorMessage" class="error-message"></div>
+            <button class="popup-button" id="popupButton">Submit</button>
+        </div>
+    </div>
+
+    <!-- Thank you message -->
+    <div class="thank-you-message" id="thankYouMessage">
+        THANK YOU for playing this game
+    </div>
+
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+        // Preload images
+        const preloadImages = [
+            'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/An_detective_agent_cartoon_woman-removebg-preview%20%281%29-zoTDxPsQvzzzWXjw98MAK9noqYTcT6.png',
+            'players.jpg',
+            'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Photo.jpg-JgedVyDlHlCyvOinBEELzSyzlfIkZS.jpeg'
+        ];
+
+        preloadImages.forEach(url => {
+            const img = new Image();
+            img.src = url;
+        });
+
+        // Email data for different pages
+        const emailData = [
+            {
+                title: "Intercepted Email",
+                from: "secret@encrypted.com",
+                to: "contact@hidden.org",
+                subject: "Upcoming Match",
+                body: `Hello brother,
+
+We are going to play a football match versus Delhi Warriors. Please be prepared for it and keep the football size as large as possible.
+
+Regards`
+            },
+            {
+                title: "Intercepted Email",
+                from: "secret@encrypted.com",
+                to: "contact@hidden.org",
+                subject: "Match Date",
+                body: `Hello brother,
+
+We will play the match on this date:
+"x.y.z"
+
+Regards`
+            },
+            {
+                title: "Intercepted Email #1",
+                from: "secret@encrypted.com",
+                to: "contact@hidden.org",
+                subject: "Equation 1",
+                body: `Hello brother,
+
+y = 52 mod x
+
+Regards`
+            },
+            {
+                title: "Intercepted Email #2",
+                from: "secret@encrypted.com",
+                to: "contact@hidden.org",
+                subject: "Equation 2",
+                body: `Hello brother,
+
+z = x^d mod n
+
+Regards`
+            },
+            {
+                title: "Intercepted Email #3",
+                from: "secret@encrypted.com",
+                to: "contact@hidden.org",
+                subject: "Equation 3",
+                body: `Hello brother,
+
+x = p^e mod q , n = pq , d = e mod(q-p)
+
+Regards`
+            },
+            {
+                title: "Intercepted Email",
+                from: "secret@encrypted.com",
+                to: "contact@hidden.org",
+                subject: "Players",
+                body: `SECURE`,
+                hasDownload: true
+            },
+            {
+                title: "Intercepted Email",
+                from: "secret@encrypted.com",
+                to: "contact@hidden.org",
+                subject: "Players",
+                body: `SECURE`,
+                hasDownload: true
+            },
+            {
+                title: "Intercepted Email",
+                from: "secret@encrypted.com",
+                to: "contact@hidden.org",
+                subject: "Get Ready!",
+                body: `0.8 0.03 0.3 0.5+3 0.0   0.6 0.4- 0.09 0.003`
+            }
+        ];
+
+        // Get DOM elements
+        const background = document.getElementById('background');
+        const gameBox = document.getElementById('gameBox');
+        const agentContainer = document.getElementById('agentContainer');
+        const welcomeMessage = document.getElementById('welcomeMessage');
+        const welcomeText = document.getElementById('welcomeText');
+        const desktopContainer = document.getElementById('desktopContainer');
+        const thumbsUpContainer = document.getElementById('thumbsUpContainer');
+        const thumbsUpBtn = document.getElementById('thumbsUpBtn');
+        const popupContainer = document.getElementById('popupContainer');
+        const popupTitle = document.getElementById('popupTitle');
+        const popupInputs = document.getElementById('popupInputs');
+        const popupInput = document.getElementById('popupInput');
+        const popupButton = document.getElementById('popupButton');
+        const errorMessage = document.getElementById('errorMessage');
+        const thankYouMessage = document.getElementById('thankYouMessage');
+        const downloadContainer = document.getElementById('downloadContainer');
+        const downloadButton = document.getElementById('downloadButton');
+
+        // Email elements
+        const emailTitle = document.getElementById('emailTitle');
+        const emailFrom = document.getElementById('emailFrom');
+        const emailTo = document.getElementById('emailTo');
+        const emailSubject = document.getElementById('emailSubject');
+        const emailBody = document.getElementById('emailBody');
+
+        // Game state
+        let gameStage = 0;
+        let currentQuestion = '';
+        let waitingForThumbsUp = false;
+
+        // Get player name from localStorage
+        const playerName = localStorage.getItem('playerName') || 'Arjav';
+
+        // Game stages and messages
+        const gameStages = [
+            // Stage 0: Initial stage
+            {
+                message: `Hello ${playerName}, our intel has predicted an attack over one of our monuments. We have been tracking email of one of the terrorist. Here is the conversation between them.`,
+                showEmail: true,
+                emailIndex: 0,
+                nextAction: 'thumbsUp',
+                nextMessage: `Agent, what do you mean by Football here?`
+            },
+            // Stage 1: Ask about football
+            {
+                message: `Agent, what do you mean by Football here?`,
+                showEmail: true,
+                nextAction: 'thumbsUp',
+                nextStage: 'question',
+                question: 'football'
+            },
+            // Stage 2: After football question
+            {
+                message: `Where are they planning their attack?`,
+                showEmail: false,
+                nextAction: 'thumbsUp',
+                nextStage: 'question',
+                question: 'location'
+            },
+            // Stage 3: After location question
+            {
+                message: `${playerName}, we have received one more email from them.`,
+                showEmail: true,
+                emailIndex: 1,
+                nextAction: 'next'
+            },
+            // Stage 4: After second email
+            {
+                message: `${playerName}, I'm receiving three more emails. Here's the first one.`,
+                showEmail: true,
+                emailIndex: 2,
+                nextAction: 'next'
+            },
+            // Stage 5: After third email
+            {
+                message: `Here's the second email, ${playerName}.`,
+                showEmail: true,
+                emailIndex: 3,
+                nextAction: 'next'
+            },
+            // Stage 6: After fourth email
+            {
+                message: `${playerName}, we have received this email from a different user ID.`,
+                showEmail: true,
+                emailIndex: 4,
+                nextAction: 'question',
+                question: 'date'
+            },
+            // Stage 7: After date question
+            {
+                message: `Brilliant ${playerName}! We have the date of attack now.`,
+                showEmail: false,
+                nextAction: 'next'
+            },
+            // Stage 8: After confirming date
+            {
+                message: `${playerName}, we have found the dates of the attack and the location of the attack but we do not know where are they going to attack in Delhi.`,
+                showEmail: false,
+                nextAction: 'next'
+            },
+            // Stage 9: After location concern
+            {
+                message: `Sir, we have received one more email.`,
+                showEmail: true,
+                emailIndex: 5,
+                photoUrl: 'players.jpg',
+                nextAction: 'download'
+            },
+            // Stage 10: After download
+            {
+                message: `${playerName}, it seems we have the names of the attackers with us.`,
+                showEmail: false,
+                nextAction: 'question',
+                question: 'names'
+            },
+            // Stage 11: After names question
+            {
+                message: `Great! We have the names of the attackers now.`,
+                showEmail: false,
+                nextAction: 'next'
+            },
+            // Stage 12: After confirming names
+            {
+                message: `Agent, I have checked with our database. The attackers seem to be dangerous.`,
+                showEmail: false,
+                nextAction: 'next'
+            },
+            // Stage 13: Show attackers
+            {
+                message: `Here they are:`,
+                showEmail: false,
+                showPhoto: true,
+                showPhoto: true,
+                emailIndex: 6,
+                photoUrl: 'photo.jpg',
+                nextAction: 'next'
+            },
+            // Stage 14: After showing attackers - MODIFIED THIS SECTION
+            {
+                message: `Agent, we have received an email again.`,
+                showEmail: true,
+                showPhoto: false,
+                emailIndex: 7,
+                nextAction: 'thumbsUp',
+                nextStage: 'question',
+                question: 'decode'
+            },
+            // Stage 15: End game
+            {
+                message: `Mission accomplished! You've saved the monument!`,
+                showEmail: false,
+                nextAction: 'end'
+            }
+        ];
+
+        // Typing effect function
+        function typeText(element, text, speed = 50) {
+            element.parentElement.classList.add('typing');
+            element.textContent = '';
+
+            return new Promise(resolve => {
+                let i = 0;
+                const timer = setInterval(() => {
+                    if (i < text.length) {
+                        element.textContent += text.charAt(i);
+                        i++;
+                    } else {
+                        clearInterval(timer);
+                        element.parentElement.classList.remove('typing');
+                        resolve();
+                    }
+                }, speed);
+            });
+        }
+
+        // Update email content
+        function updateEmailContent(index) {
+            console.log('Updating email content for index:', index);
+            const data = emailData[index];
+
+            emailTitle.textContent = data.title;
+            emailFrom.textContent = data.from;
+            emailTo.textContent = data.to;
+            emailSubject.textContent = data.subject;
+            emailBody.textContent = data.body;
+
+            // Show download button if needed
+            downloadContainer.style.display = data.hasDownload ? 'block' : 'none';
+
+            var desktopContainer = document.getElementById('desktopContainer');
+            var photoContainer = document.getElementById('photoContainer');
+
+            if (index === 6 && gameStages[gameStage].showPhoto) {
+                // Hide email UI, show photo
+                desktopContainer.style.display = 'none';
+                emailc.style.display = 'none';
+                photoContainer.style.display = 'block';
+                console.log('Showing photo.jpg');
+            } else {
+                // Show email UI, hide photo
+                desktopContainer.style.display = 'block';
+                emailc.style.display = 'block';
+                photoContainer.style.display = 'none';
+                console.log('Restoring email content.');
+            }
+        }
+
+
+
+
+        // Show popup function
+        function showPopup(title, inputType = 'single') {
+            popupTitle.textContent = title;
+
+            // Clear previous inputs
+            popupInputs.innerHTML = '';
+
+            if (inputType === 'single') {
+                // Single input field
+                popupInputs.innerHTML = `<input type="text" id="popupInput" class="popup-input" placeholder="Enter your answer">`;
+            } else if (inputType === 'names') {
+                // Three input fields for names
+                popupInputs.innerHTML = `
+                    <input type="text" id="nameInput1" class="popup-input" placeholder="Enter first attacker's name">
+                    <input type="text" id="nameInput2" class="popup-input" placeholder="Enter second attacker's name">
+                    <input type="text" id="nameInput3" class="popup-input" placeholder="Enter third attacker's name">
+                `;
+            }
+
+            errorMessage.textContent = '';
+            popupContainer.classList.add('active');
+
+            // Focus on the first input
+            setTimeout(() => {
+                const firstInput = popupInputs.querySelector('input');
+                if (firstInput) firstInput.focus();
+            }, 300);
+        }
+
+        // Hide popup function
+        function hidePopup() {
+            popupContainer.classList.remove('active');
+        }
+
+        // Check answer function
+        function checkAnswer(answer, question) {
+            if (question === 'football') {
+                return answer.toLowerCase() === 'bomb';
+            } else if (question === 'location') {
+                return answer.toLowerCase() === 'delhi';
+            } else if (question === 'date') {
+                const datePattern = /^\s*25\s*\/\s*2\s*\/\s*2003\s*$/;
+                return datePattern.test(answer);
+            } else if (question === 'names') {
+                // Check if all three names are correct (in any order)
+                const expectedNames = ['RONY', 'PANTAR', 'JUNIOR'];
+                const providedNames = answer.map(name => name.toUpperCase().trim());
+
+                // Check if all expected names are in the provided names
+                return expectedNames.every(name => providedNames.includes(name));
+            } else if (question === 'decode') {
+                return answer.toUpperCase().trim() === 'INDIA GATE';
+            }
+
+            return false;
+        }
+
+        // Process the current stage
+        async function processStage() {
+            const stage = gameStages[gameStage];
+
+            // Hide thumbs up button
+            thumbsUpContainer.style.display = 'none';
+
+            // Show/hide desktop container based on stage
+            if (stage.showEmail) {
+                if (stage.emailIndex !== undefined) {
+                    updateEmailContent(stage.emailIndex);
+                }
+                desktopContainer.style.display = 'flex';
+            } else {
+                if (stage.showPhoto) {
+                    photoContainer.style.display = 'block';
+                }
+
+                desktopContainer.style.display = 'none';
+            }
+
+            // Show message
+            welcomeMessage.style.opacity = '1';
+            await typeText(welcomeText, stage.message);
+
+            // Determine next action
+            if (stage.nextAction === 'thumbsUp') {
+                // Show thumbs up button
+                setTimeout(() => {
+                    thumbsUpContainer.style.display = 'flex';
+                    waitingForThumbsUp = true;
+                }, 2000);
+            } else if (stage.nextAction === 'question') {
+                currentQuestion = stage.question;
+
+                if (currentQuestion === 'names') {
+                    showPopup("Enter the names of the attackers", 'names');
+                } else if (currentQuestion === 'decode') {
+                    showPopup("Decode the message");
+                } else {
+                    showPopup("Decode the message");
+                }
+            } else if (stage.nextAction === 'download') {
+                // Wait for download button click
+            } else if (stage.nextAction === 'next') {
+                // Show thumbs up button
+                setTimeout(() => {
+                    thumbsUpContainer.style.display = 'flex';
+                }, 2000);
+            } else if (stage.nextAction === 'end') {
+                // End the game
+                endGame();
+            }
+        }
+
+        // Handle thumbs up button click
+        function handleThumbsUp() {
+            if (waitingForThumbsUp) {
+                waitingForThumbsUp = false;
+
+                const stage = gameStages[gameStage];
+
+                if (stage.nextStage === 'question') {
+                    // Show popup for question
+                    currentQuestion = stage.question;
+                    showPopup("Decode the message");
+                } else if (stage.nextMessage) {
+                    // Go to next stage with specific message
+                    gameStage++;
+                    processStage();
+                } else {
+                    // Go to next stage
+                    gameStage++;
+                    processStage();
+                }
+            } else {
+                // Go to next stage
+                gameStage++;
+                processStage();
+            }
+        }
+
+        // End game function
+        function endGame() {
+            // Hide game box and agent
+            gameBox.style.opacity = '0';
+            gameBox.style.transform = 'translateY(-50px)';
+
+            // Show background clearly
+            background.style.filter = 'blur(0)';
+
+            // Show thank you message
+            setTimeout(() => {
+                thankYouMessage.classList.add('visible');
+            }, 1500);
+        }
+
+        // Handle popup submit
+        function handlePopupSubmit() {
+            let answer;
+            let isValid = false;
+
+            if (currentQuestion === 'names') {
+                // Get values from all three inputs
+                const nameInput1 = document.getElementById('nameInput1');
+                const nameInput2 = document.getElementById('nameInput2');
+                const nameInput3 = document.getElementById('nameInput3');
+
+                if (!nameInput1.value.trim() || !nameInput2.value.trim() || !nameInput3.value.trim()) {
+                    errorMessage.textContent = 'Please enter all three names';
+                    return;
+                }
+
+                answer = [nameInput1.value, nameInput2.value, nameInput3.value];
+                isValid = checkAnswer(answer, currentQuestion);
+            } else {
+                // Get value from single input
+                const input = document.getElementById('popupInput');
+                answer = input.value.trim();
+
+                if (answer === '') {
+                    errorMessage.textContent = 'Please enter an answer';
+                    return;
+                }
+
+                isValid = checkAnswer(answer, currentQuestion);
+            }
+
+            if (isValid) {
+                hidePopup();
+
+                // If it's the final question, end the game
+                if (currentQuestion === 'decode') {
+                    endGame();
+                } else {
+                    // Go to next stage
+                    gameStage++;
+                    processStage();
+                }
+            } else {
+                errorMessage.textContent = 'Please try again';
+            }
+        }
+
+        // Game progression
+        async function startGame() {
+            // Process the first stage
+            processStage();
+        }
+
+        // Event listeners
+        thumbsUpBtn.addEventListener('click', handleThumbsUp);
+
+        popupButton.addEventListener('click', handlePopupSubmit);
+
+        // Allow submitting by pressing Enter
+        document.addEventListener('keypress', function (event) {
+            if (event.key === 'Enter' && popupContainer.classList.contains('active')) {
+                popupButton.click();
+            }
+        });
+
+        // Handle download button click
+        // Modify the image download logic in stage 13
+        document.getElementById('downloadButton').addEventListener('click', function (event) {
+
+            event.preventDefault(); // Prevent opening the image
+
+            // Create a download link
+            const link = document.createElement('a');
+            window.open('players.jpg');
+            // Proceed to next stage after download
+            setTimeout(() => {
+                gameStage++;
+                processStage();
+            }, 300);
+        });
+
+
+        // Start the game when the page loads
+        window.addEventListener('DOMContentLoaded', function () {
+            setTimeout(startGame, 500);
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cric-Crypt Quiz</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            height: 100vh;
+            background: url('background-image.avif') no-repeat center center fixed;
+            background-size: cover;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        } 
+
+        .quiz-container {
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* Adjusted to ensure content is centered */
+            width: 80vw;
+            background-color: rgba(30, 30, 30, 0.9);
+            padding: 20px;
+            box-sizing: border-box;
+            animation: fadeIn 0.5s ease-in-out;
+            text-align: center;
+            flex-wrap: wrap;
+            overflow: auto;
+            margin: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .quiz-container:first-child {
+            display: block; /* Show only the first question initially */
+        }
+
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        p {
+            font-style: normal;
+            margin: 10px 0;
+            font-size: 1.5em;
+        }
+
+        h1 {
+            font-style: italic;
+            margin-bottom: 50px;
+            font-size: 3rem;
+        }
+
+        .options {
+            justify-content: space-around;
+            margin-top: 20px;
+            width: 100%;
+            margin-top: 80px;
+            margin-bottom: 80px;
+            display: flex;
+        }
+
+        .options label {
+            flex-direction: column;
+            align-items: center;
+            transition: transform 0.3s;
+            display: flex;
+        }
+
+        .options label:hover {
+            transform: scale(1.1);
+        }
+
+        .options img {
+            height: 120px; /* Set a fixed height */
+            object-fit: calc(); /* Ensures the image fills the box without distortion */
+            cursor: pointer;
+            border: 5px solid transparent;
+            transition: border-color 0.3s;
+            border-radius: 15px;
+            width: 120px;  /* Set a fixed width */
+        }
+
+
+        .options input[type="radio"] {
+            display: none;
+        }
+
+        .options input[type="radio"]:checked + img {
+            border-color: #11a0cc;
+        }
+
+        .buttons {
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+            padding-bottom: 10px;
+            display: flex;
+        }   
+
+        button {
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #6200ea;
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            transition: background-color 0.3s;
+            padding: 12px 24px;
+        }
+
+        button:hover {
+            background-color: #3700b3;
+        }
+
+        .result {
+            font-size: 18px;
+            font-weight: bold;
+            color: #bb86fc;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Question 1 -->
+    <div class="quiz-container" id="question1">
+        <h1>Cric-Crypt Quiz</h1>
+        <p>Q: A type of bowling delivery is encrypted using the Rail Fence Cipher (Depth = 3):</p>
+        <p><strong>🔐 "OSNWIUINGT"</strong></p>
+        <div class="options"> 
+            <label>
+                <input type="radio" name="answer1" value="option1">
+                <img src="inswing.jpg" alt="Option 1">
+                <p>inswing</p>
+            </label>
+            <label>
+                <input type="radio" name="answer1" value="option2">
+                <img src="reverse swing.jpg" alt="Option 2">
+                <p>reverse swing</p>
+            </label>
+            <label>
+                <input type="radio" name="answer1" value="option3">
+                <img src="outswing.jpg" alt="Option 3">
+                <p>outswing</p>
+            </label>
+            <label>
+                <input type="radio" name="answer1" value="option4">
+                <img src="leg cutter.jpg" alt="Option 4">
+                <p>leg cutter</p>
+            </label>
+        </div>
+        <div class="buttons">
+            <button onclick="submitAnswer('answer1', 'option3', 'result1')">Submit</button>
+            <button onclick="nextQuestion('question2')">Next</button>
+        </div>
+        <p id="result1" class="result"></p>
+    </div>    
+
+    <!-- Question 2 -->
+    <div class="quiz-container" id="question2" style="display: none;">
+        <h1>Cric-Crypt Quiz</h1>
+        <p>Q: A cricket commentator encrypts a famous cricketer's jersey number using RSA.</p>
+        <ul>
+            <li>Public key: \( (e = 7, n = 187) \)</li>
+            <li>Jersey number (M) is hidden and encrypted using: \( C = M^e \mod n \)</li>
+            <li>The encrypted number is 136.</li>
+        </ul>
+        <p>🧩 Which legendary cricketer wears this jersey number?</p>
+        <div class="options">
+            <label>
+                <input type="radio" name="answer2" value="option1">
+                <img src="virat.jpg" alt="Cricketer 1">
+                <p>Virat Kohli</p>
+            </label>
+            <label>
+                <input type="radio" name="answer2" value="option2">
+                <img src="sachin.jpg" alt="Cricketer 2">
+                <p>Sachin Tendulkar</p>
+            </label>
+            <label>
+                <input type="radio" name="answer2" value="option3">
+                <img src="rohit.jpg" alt="Cricketer 3">
+                <p>Rohit Sharma</p>
+            </label>
+            <label>
+                <input type="radio" name="answer2" value="option4">
+                <img src="bumrah.jpg" alt="Cricketer 4">
+                <p>Jasprit Bumrah</p>
+            </label>
+        </div>
+        <div class="buttons">
+            <button onclick="submitAnswer('answer2', 'option2', 'result2')">Submit</button>
+            <button onclick="nextQuestion('question3')">Next</button>
+        </div>
+        <p id="result2" class="result"></p>
+    </div>
+
+    <!-- Question 3 -->
+    <div class="quiz-container" id="question3" style="display: none;">
+        <h1>Cric-Crypt Quiz</h1>
+        <p>Q: A famous cricket tournament is encrypted using the Hill Cipher with the key matrix:</p>
+        <p>\[
+        K = \begin{bmatrix} 6 & 3 \\ 4 & 5 \end{bmatrix}
+        \]</p>
+        <p>The encrypted name is: <strong>🔒 "XMGZR UQHMP"</strong></p>
+        <p>Which tournament is this?</p>
+        <div class="options">
+            <label>
+                <input type="radio" name="answer3" value="option1">
+                <img src="t20.jpg" alt="Tournament 1">
+                <p>T20 World Cup</p>
+            </label>
+            <label>
+                <input type="radio" name="answer3" value="option2">
+                <img src="odi.jpg" alt="Tournament 2">
+                <p>ODI World Cup</p>
+            </label>
+            <label>
+                <input type="radio" name="answer3" value="option3">
+                <img src="champions trophy.jpg" alt="Tournament 3">
+                <p>Champions Trophy</p>
+            </label>
+            <label>
+                <input type="radio" name="answer3" value="option4">
+                <img src="wtc.jpg" alt="Tournament 4">
+                <p>WTC Mace</p>
+            </label>
+        </div>
+        <div class="buttons">
+            <button onclick="submitAnswer('answer3', 'option1', 'result3')">Submit</button>
+            <button onclick="nextQuestion('question4')">Next</button>
+        </div>
+        <p id="result3" class="result"></p>
+    </div>
+
+    <!-- Question 4 -->
+    <div class="quiz-container" id="question4" style="display: none;">
+        <h1>Cric-Crypt Quiz</h1>
+        <p>Q: A cricket fielding position is determined using the Linear Congruential Generator (LCG) formula:</p>
+        <p>\[
+        X_{n+1} = (aX_n + c) \mod m
+        \]</p>
+        <ul>
+            <li>a = 7, c = 4, m = 29</li>
+            <li>X₀ = 5 (initial value)</li>
+            <li>Find X₆ (6th term in the sequence).</li>
+        </ul>
+        <p>The result corresponds to a fielding position in cricket. What is it?</p>
+        <div class="options">
+            <label>
+                <input type="radio" name="answer4" value="option1">
+                <img src="long off.jpg" alt="Position 1">
+                <p>long off</p>
+            </label>
+            <label>
+                <input type="radio" name="answer4" value="option2">
+                <img src="third man.jpg" alt="Position 2">
+                <p>third man</p>
+            </label>
+            <label>
+                <input type="radio" name="answer4" value="option3">
+                <img src="cow corner.jpg" alt="Position 3">
+                <p>cow corner</p>
+            </label>
+            <label>
+                <input type="radio" name="answer4" value="option4">
+                <img src="gully.jpg" alt="Position 4">
+                <p>gully</p>
+            </label>
+        </div>
+        <div class="buttons">
+            <button onclick="submitAnswer('answer4', 'option3', 'result4')">Submit</button>
+            <button onclick="nextQuestion('question5')">Next</button>
+        </div>
+        <p id="result4" class="result"></p>
+    </div>
+
+    <!-- Question 5 -->
+    <div class="quiz-container" id="question5" style="display: none;">
+        <h1>Cric-Crypt Quiz</h1>
+        <p>Q: If Caesar cipher decryption technique is used for key = 3, then this word becomes the name of which cricket player:</p>
+        <p><strong>🔐 "OLEFQ"</strong></p>
+        <div class="options">
+            <label>
+                <input type="radio" name="answer5" value="option1">
+                <img src="sachin.jpg" alt="Player 1">
+                <p>Sachin Tendulkar</p>
+            </label>
+            <label>
+                <input type="radio" name="answer5" value="option2">
+                <img src="rohit.jpg" alt="Player 2">
+                <p>Rohit Sharma</p>
+            </label>
+            <label>
+                <input type="radio" name="answer5" value="option3">
+                <img src="virat.jpg" alt="Player 3">
+                <p>Virat Kohli</p>
+            </label>
+            <label>
+                <input type="radio" name="answer5" value="option4">
+                <img src="bumrah.jpg" alt="Player 4">
+                <p>Jasprit Bumrah</p>
+            </label>
+        </div>
+        <div class="buttons">
+            <button onclick="submitAnswer('answer5', 'option2', 'result5')">Submit</button>
+            <button onclick="nextQuestion('question6')">Next</button>
+        </div>
+        <p id="result5" class="result"></p>
+    </div>
+
+    <!-- Question 6 -->
+    <div class="quiz-container" id="question6" style="display: none;">
+        <h1>Cric-Crypt Quiz</h1>
+        <p>Q: A cricketer has a jersey number x that satisfies:</p>
+        <p>\( x \equiv 10 \pmod{13} \)</p>
+        <p>Who is he?</p>
+        <div class="options">
+            <label>
+                <input type="radio" name="answer6" value="option1">
+                <img src="virat.jpg" alt="Virat Kohli">
+                <p>Virat Kohli</p>
+            </label>
+            <label>
+                <input type="radio" name="answer6" value="option2">
+                <img src="rohit.jpg" alt="Player 2">
+                <p>Rohit Sharma</p>
+            </label>
+            <label>
+                <input type="radio" name="answer6" value="option3">
+                <img src="sachin.jpg" alt="Player 3">
+                <p>Sachin Tendulkar</p>
+            </label>
+            <label>
+                <input type="radio" name="answer6" value="option4">
+                <img src="bumrah.jpg" alt="Player 4">
+                <p>Jasprit Bumrah</p>
+            </label>
+        </div>
+        <div class="buttons">
+            <button onclick="submitAnswer('answer6', 'option1', 'result6')">Submit</button>
+            <button onclick="nextQuestion('question7')">Next</button>
+        </div>
+        <p id="result6" class="result"></p>
+    </div>
+
+    <!-- Question 7 -->
+    <div class="quiz-container" id="question7" style="display: none;">
+        <h1>Cric-Crypt Quiz</h1>
+        <p>Q: The name of a famous cricket stadium is encrypted using the Vigenère Cipher with the keyword "CRICKET":</p>
+        <p><strong>🔐 "XMOEX OXAMXFE"</strong></p>
+        <p>Which stadium is this?</p>
+        <div class="options">
+            <label>
+                <input type="radio" name="answer7" value="option1">
+                <img src="chinhaswamy.jpg" alt="Stadium 1">
+                <p>Chinhaswamy Stadium</p>
+            </label>
+            <label>
+                <input type="radio" name="answer7" value="option2">
+                <img src="wankhede.jpg" alt="Stadium 2">
+                <p>Wankhede Stadium</p>
+            </label>
+            <label>
+                <input type="radio" name="answer7" value="option3">
+                <img src="eden garden.jpg" alt="Stadium 3">
+                <p>Eden Garden</p>
+            </label>
+            <label>
+                <input type="radio" name="answer7" value="option4">
+                <img src="narendra modi.jpg" alt="Stadium 4">
+                <p>Narendra Modi Stadium</p>
+            </label>
+        </div>
+        <div class="buttons">
+            <button onclick="submitAnswer('answer7', 'option3', 'result7')">Submit</button>
+            <button onclick="finishQuiz()">Finish</button>
+        </div>
+        <p id="result7" class="result"></p>
+    </div>
+
+    <script>
+        function nextQuestion(nextId) {
+            document.querySelectorAll('.quiz-container').forEach(container => {
+                container.style.display = 'none';
+            });
+            document.getElementById(nextId).style.display = 'block';
+        }
+
+        function submitAnswer(answerName, correctValue, resultId) {
+            const selectedOption = document.querySelector(`input[name="${answerName}"]:checked`);
+            const result = document.getElementById(resultId);
+    
+            if (selectedOption) {
+                if (selectedOption.value === correctValue) {
+                    result.textContent = "Correct! Well done!";
+                    result.style.color = "green";
+                } else {
+                    result.textContent = "Incorrect. Try again!";
+                    result.style.color = "red";
+                }
+            } else {
+                result.textContent = "Please select an option.";
+                result.style.color = "white";
+            }
+        }
+
+        function finishQuiz() {
+            alert("Quiz completed! Thank you for participating.");
+        }
+    </script>
+</body>
+</html>

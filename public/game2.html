@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SecureBank - Security Challenge</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Courier New", monospace;
+      }
+
+      body {
+        background-color: #0a0a0a;
+        color: #33ff33;
+        min-height: 100vh;
+        padding: 20px;
+      }
+
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        border: 1px solid #33ff33;
+      }
+
+      header {
+        margin-bottom: 30px;
+        text-align: center;
+        border-bottom: 1px solid #33ff33;
+        padding-bottom: 10px;
+      }
+
+      h1,
+      h2,
+      h3 {
+        margin-bottom: 15px;
+      }
+
+      .challenge {
+        margin-bottom: 30px;
+        display: none;
+      }
+
+      .challenge.active {
+        display: block;
+      }
+
+      .terminal {
+        background-color: #121212;
+        border: 1px solid #33ff33;
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(51, 255, 51, 0.3);
+      }
+
+      input[type="text"],
+      input[type="password"],
+      input[type="file"] {
+        background-color: #121212;
+        border: 1px solid #33ff33;
+        color: #33ff33;
+        padding: 8px 12px;
+        width: 100%;
+        margin-top: 10px;
+        margin-bottom: 15px;
+      }
+
+      button {
+        background-color: #121212;
+        color: #33ff33;
+        border: 1px solid #33ff33;
+        padding: 8px 16px;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      button:hover {
+        background-color: #33ff33;
+        color: #121212;
+      }
+
+      .hint {
+        font-style: italic;
+        margin-top: 15px;
+        color: #bbb;
+      }
+
+      .success-message {
+        color: #33ff33;
+        margin: 10px 0;
+        font-weight: bold;
+      }
+
+      .error-message {
+        color: #ff3333;
+        margin: 10px 0;
+      }
+
+      .loading {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 2px solid rgba(51, 255, 51, 0.3);
+        border-radius: 50%;
+        border-top-color: #33ff33;
+        animation: spin 1s ease-in-out infinite;
+        margin-left: 10px;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .locker-room {
+        display: none;
+        text-align: center;
+      }
+
+      .vault-door {
+        width: 100%;
+        max-width: 400px;
+        margin: 0 auto;
+        height: 300px;
+        background-color: #333;
+        border: 10px solid #222;
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 30px;
+      }
+
+      .vault-text {
+        font-size: 48px;
+        color: gold;
+        text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+      }
+
+      .congratulations {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.9);
+        color: gold;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        z-index: 100;
+        padding: 20px;
+        text-align: center;
+      }
+
+      .congratulations h2 {
+        font-size: 36px;
+        margin-bottom: 20px;
+        text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+      }
+
+      .trap-form {
+        max-width: 500px;
+        margin: 0 auto;
+      }
+
+      .trap-form input {
+        margin: 10px 0;
+        padding: 12px;
+      }
+
+      .trap-message {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #ff0000;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        z-index: 200;
+        padding: 20px;
+        text-align: center;
+      }
+
+      .police-logo {
+        width: 150px;
+        height: 150px;
+        background-color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 30px;
+        font-size: 24px;
+        font-weight: bold;
+        color: #ff0000;
+      }
+
+      .blink {
+        animation: blink 1s infinite;
+      }
+
+      @keyframes blink {
+        0% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+
+      .progress-bar {
+        height: 20px;
+        background-color: #121212;
+        border: 1px solid #33ff33;
+        margin-bottom: 20px;
+        border-radius: 10px;
+        overflow: hidden;
+      }
+
+      .progress {
+        height: 100%;
+        background-color: #33ff33;
+        width: 0%;
+        transition: width 0.5s;
+      }
+
+      .challenge-number {
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 14px;
+      }
+
+      /* New styles for wanted poster */
+      .wanted-poster {
+        margin: 20px 0;
+        border: 5px solid black;
+        background-color: #fff;
+        padding: 10px;
+        max-width: 300px;
+      }
+
+      .wanted-poster img {
+        width: 100%;
+        border: 2px solid #000;
+      }
+
+      .wanted-text {
+        font-family: "Times New Roman", serif;
+        color: #000;
+        font-size: 24px;
+        font-weight: bold;
+        text-align: center;
+        margin-top: 10px;
+        text-transform: uppercase;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>SecureBank Penetration Test</h1>
+        <p>
+          Prove your hacking skills by solving these cryptography challenges
+        </p>
+      </header>
+
+      <div class="progress-bar">
+        <div class="progress" id="progressBar"></div>
+      </div>
+      <div class="challenge-number" id="challengeNumber">Challenge: 1/3</div>
+
+      <!-- Challenge 1: Caesar Cipher -->
+      <div class="challenge active" id="challenge1">
+        <h2>Challenge 1: Decrypt the Message</h2>
+        <div class="terminal">
+          <p>Access code encrypted with a simple shift cipher:</p>
+          <p id="encryptedMessage">Hvtlivkp eldv: xlii_kvjkvw_svxfivw</p>
+        </div>
+        <p>Enter the decrypted message to proceed:</p>
+        <input
+          type="text"
+          id="challenge1Input"
+          placeholder="Enter your answer"
+        />
+        <button id="challenge1Submit">Submit</button>
+        <p class="hint">
+          Hint: Each letter might be shifted by the same number of positions in
+          the alphabet.
+        </p>
+        <p id="challenge1Result"></p>
+      </div>
+
+      <!-- Challenge 2: Binary to ASCII -->
+      <div class="challenge" id="challenge2">
+        <h2>Challenge 2: Binary Decoding</h2>
+        <div class="terminal">
+          <p>Found the following binary code in the system logs:</p>
+          <p id="binaryCode">
+            01110000 01100001 01110011 01110011 01110111 01101111 01110010
+            01100100 00111010 00100000 01100010 01101001 01101110 01100001
+            01110010 01111001 01011111 01101101 01100001 01110011 01110100
+            01100101 01110010
+          </p>
+        </div>
+        <p>What does this code reveal? Enter the complete decoded message:</p>
+        <input
+          type="text"
+          id="challenge2Input"
+          placeholder="Enter your answer"
+        />
+        <button id="challenge2Submit">Submit</button>
+        <p class="hint">
+          Hint: Each 8-bit group represents a single ASCII character.
+        </p>
+        <p id="challenge2Result"></p>
+      </div>
+
+      <!-- Challenge 3: MD5 Hash -->
+      <div class="challenge" id="challenge3">
+        <h2>Challenge 3: Hash Cracking</h2>
+        <div class="terminal">
+          <p>Security system locked with a hashed password.</p>
+          <p>MD5 Hash: e10adc3949ba59abbe56e057f20f883e</p>
+          <p>Hint: It's a common 6-digit number.</p>
+        </div>
+        <p>Enter the original password to bypass the system:</p>
+        <input
+          type="text"
+          id="challenge3Input"
+          placeholder="Enter the cracked password"
+        />
+        <button id="challenge3Submit">Submit</button>
+        <p class="hint">
+          Hint: Try common patterns or sequences people might use for a 6-digit
+          number.
+        </p>
+        <p id="challenge3Result"></p>
+      </div>
+
+      <!-- Locker Room (The Trap) -->
+      <div class="locker-room" id="lockerRoom">
+        <h2>BANK VAULT ACCESS</h2>
+        <div class="vault-door">
+          <div class="vault-text">$$$</div>
+        </div>
+        <p>Scanning system files...</p>
+        <div class="terminal">
+          <p>STATUS: <span class="success-message">ACCESS GRANTED</span></p>
+          <p>VAULT SECURITY: <span class="error-message">BYPASSED</span></p>
+          <p>
+            FUNDS: <span class="success-message">$24,752,109.87 AVAILABLE</span>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Congratulations Screen (The Trap) -->
+    <div class="congratulations" id="congratsScreen" style="display: none">
+      <h2>CONGRATULATIONS!</h2>
+      <p>You've successfully penetrated SecureBank's security system.</p>
+      <p>You are just ONE STEP AWAY from accessing $24,752,109.87</p>
+      <br />
+      <p>
+        For security verification and to complete the transfer, we need to
+        confirm your identity:
+      </p>
+
+      <div class="trap-form">
+        <input
+          type="text"
+          id="realName"
+          placeholder="Enter your full legal name"
+          required
+        />
+        <input type="file" id="selfieUpload" accept="image/*" required />
+        <p class="hint">
+          A selfie is required to bypass the final biometric check
+        </p>
+        <button id="completeHeist">Complete Heist & Transfer Funds</button>
+      </div>
+    </div>
+
+    <!-- Trap Message -->
+    <div class="trap-message" id="trapMessage" style="display: none">
+      <div class="police-logo">CYBER CELL</div>
+      <h2 class="blink">YOU HAVE BEEN TRACKED!</h2>
+
+      <!-- Wanted Poster Section -->
+      <div class="wanted-poster">
+        <img id="wantedImage" src="" alt="Captured Image" />
+        <div class="wanted-text">WANTED !!!</div>
+      </div>
+
+      <p id="capturedInfo"></p>
+      <p>Your attempt to hack into a banking system has been recorded.</p>
+      <p>
+        Your IP address, location, and personal information have been shared
+        with the Cyber Crime Cell.
+      </p>
+      <p>This was a honeypot designed to catch malicious actors.</p>
+      <h3>
+        Legal action may be taken against you under relevant cyber crime laws.
+      </h3>
+    </div>
+
+    <script>
+      // *** FIXED ANSWERS ***
+      // The answers now match exactly what is shown in the challenge
+      const CORRECT_ANSWERS = {
+        challenge1: "security code: well_tested_secured", // Fixed to match exact decryption
+        challenge2: "password: binary_master",
+        challenge3: "123456", // This is the plain text of the MD5 hash e10adc3949ba59abbe56e057f20f883e
+      };
+
+      // Get elements
+      const challenge1 = document.getElementById("challenge1");
+      const challenge2 = document.getElementById("challenge2");
+      const challenge3 = document.getElementById("challenge3");
+      const lockerRoom = document.getElementById("lockerRoom");
+      const congratsScreen = document.getElementById("congratsScreen");
+      const trapMessage = document.getElementById("trapMessage");
+      const progressBar = document.getElementById("progressBar");
+      const challengeNumber = document.getElementById("challengeNumber");
+      const wantedImage = document.getElementById("wantedImage");
+
+      // Challenge 1 (Caesar Cipher) - FIXED
+      document
+        .getElementById("challenge1Submit")
+        .addEventListener("click", function () {
+          // Get user answer and normalize it for comparison
+          const userAnswer = document
+            .getElementById("challenge1Input")
+            .value.trim()
+            .toLowerCase();
+          const resultElement = document.getElementById("challenge1Result");
+
+          // Check multiple valid formats - now allows for variation in the answer
+          const validAnswers = [
+            "security code: well_tested_secured",
+            "security_code: well_tested_secured",
+            "security code:well_tested_secured",
+            "security_code:well_tested_secured",
+          ];
+
+          if (validAnswers.includes(userAnswer)) {
+            resultElement.textContent =
+              "Correct! Access granted to the next level.";
+            resultElement.className = "success-message";
+
+            // Move to challenge 2 after a brief delay
+            setTimeout(() => {
+              challenge1.classList.remove("active");
+              challenge2.classList.add("active");
+              progressBar.style.width = "33%";
+              challengeNumber.textContent = "Challenge: 2/3";
+            }, 1500);
+          } else {
+            resultElement.textContent =
+              "Incorrect. Try again with a different shift key.";
+            resultElement.className = "error-message";
+          }
+        });
+
+      // Challenge 2 (Binary to ASCII)
+      document
+        .getElementById("challenge2Submit")
+        .addEventListener("click", function () {
+          const userAnswer = document
+            .getElementById("challenge2Input")
+            .value.trim()
+            .toLowerCase();
+          const resultElement = document.getElementById("challenge2Result");
+
+          if (userAnswer === CORRECT_ANSWERS.challenge2) {
+            resultElement.textContent = "Correct! Binary successfully decoded.";
+            resultElement.className = "success-message";
+
+            // Move to challenge 3 after a brief delay
+            setTimeout(() => {
+              challenge2.classList.remove("active");
+              challenge3.classList.add("active");
+              progressBar.style.width = "66%";
+              challengeNumber.textContent = "Challenge: 3/3";
+            }, 1500);
+          } else {
+            resultElement.textContent =
+              "Incorrect. Check your binary conversion.";
+            resultElement.className = "error-message";
+          }
+        });
+
+      // Challenge 3 (MD5 Hash)
+      document
+        .getElementById("challenge3Submit")
+        .addEventListener("click", function () {
+          const userAnswer = document
+            .getElementById("challenge3Input")
+            .value.trim();
+          const resultElement = document.getElementById("challenge3Result");
+
+          if (userAnswer === CORRECT_ANSWERS.challenge3) {
+            resultElement.textContent =
+              "Password correct! Breaking into the vault...";
+            resultElement.className = "success-message";
+
+            // Simulate loading
+            resultElement.innerHTML += ' <div class="loading"></div>';
+
+            // Move to locker room after a brief delay
+            setTimeout(() => {
+              challenge3.classList.remove("active");
+              lockerRoom.style.display = "block";
+              progressBar.style.width = "100%";
+              challengeNumber.textContent = "All Challenges Complete!";
+
+              // Show congrats screen after a short delay
+              setTimeout(() => {
+                congratsScreen.style.display = "flex";
+              }, 3000);
+            }, 2000);
+          } else {
+            resultElement.textContent =
+              "Incorrect hash. Try another common password.";
+            resultElement.className = "error-message";
+          }
+        });
+
+      // Trap activation
+      document
+        .getElementById("completeHeist")
+        .addEventListener("click", function (e) {
+          e.preventDefault();
+
+          const nameInput = document.getElementById("realName").value.trim();
+          const selfieInput = document.getElementById("selfieUpload");
+
+          // Check if inputs are provided
+          if (nameInput === "" || !selfieInput.files[0]) {
+            alert("Please provide both your name and a selfie to proceed.");
+            return;
+          }
+
+          // Show loading simulation
+          this.textContent = "Processing...";
+          this.disabled = true;
+
+          // Activate the trap after a brief delay
+          setTimeout(() => {
+            document.getElementById(
+              "capturedInfo"
+            ).textContent = `Information captured: Name: "${nameInput}" | Image data collected | Device information recorded`;
+
+            // Display the uploaded image in the wanted poster
+            const file = selfieInput.files[0];
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+              wantedImage.src = e.target.result;
+            };
+
+            reader.readAsDataURL(file);
+
+            congratsScreen.style.display = "none";
+            trapMessage.style.display = "flex";
+          }, 2000);
+        });
+
+      // Add helpful functions for solving the challenges
+      // For Challenge 1 - Caesar cipher decoder
+      function decodeCaesar(str, shift) {
+        return str
+          .split("")
+          .map((char) => {
+            // Handle only letters, leave spaces and special characters unchanged
+            if (/[a-z]/i.test(char)) {
+              const code = char.charCodeAt(0);
+              const isUpperCase = code >= 65 && code <= 90;
+              const offset = isUpperCase ? 65 : 97;
+
+              // Apply shift and ensure it wraps correctly (modulo 26)
+              return String.fromCharCode(
+                ((code - offset - shift + 26) % 26) + offset
+              );
+            }
+            return char;
+          })
+          .join("");
+      }
+
+      // For Challenge 2 - Binary to ASCII conversion
+      function binaryToASCII(binary) {
+        return binary
+          .split(" ")
+          .map((byte) => String.fromCharCode(parseInt(byte, 2)))
+          .join("");
+      }
+
+      // Console helper for users to decrypt Challenge 1
+      console.log(
+        "Hint for Challenge 1: Try using the caesarDecode function in the console:"
+      );
+      console.log(
+        "To decrypt the message with a shift of 4: caesarDecode('Hvtlivkp eldv: xlii_kvjkvw_svxfivw', 4)"
+      );
+
+      // Make decoding functions available in global scope for console use
+      window.caesarDecode = decodeCaesar;
+      window.binaryToASCII = binaryToASCII;
+
+      // Print hints to console
+      console.log(
+        "Challenge 1 hint: The encrypted text uses a Caesar cipher with a shift of 4"
+      );
+      console.log(
+        "Challenge 2 hint: Use binaryToASCII function with the binary string to decode it"
+      );
+      console.log(
+        "Challenge 3 hint: The MD5 hash e10adc3949ba59abbe56e057f20f883e decodes to a very common password"
+      );
+    </script>
+  </body>
+</html>

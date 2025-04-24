@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up Page</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Arial', sans-serif;
+    }
+    
+    body {
+      background-image: url('https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-eRUiLtcmmMPI9EpZOpL4rOLLcLuz01.png');
+      background-size: cover;
+      background-position: center;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    
+    .container {
+      display: flex;
+      width: 100%;
+      max-width: 900px;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 0 20px rgba(0, 212, 212, 0.5);
+      animation: glow 3s infinite alternate;
+    }
+    
+    @keyframes glow {
+      from {
+        box-shadow: 0 0 10px rgba(0, 212, 212, 0.5);
+      }
+      to {
+        box-shadow: 0 0 20px rgba(0, 212, 212, 0.8);
+      }
+    }
+    
+    .form-container {
+      background-color: #0a1520;
+      padding: 40px;
+      width: 50%;
+    }
+    
+    .welcome-container {
+      background-color: #00d4d4;
+      padding: 40px;
+      width: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    h1 {
+      color: white;
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 28px;
+    }
+    
+    h2 {
+      color: white;
+      font-size: 32px;
+      font-weight: bold;
+    }
+    
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: #00d4d4;
+    }
+    
+    input {
+      width: 100%;
+      padding: 12px 15px;
+      border-radius: 50px;
+      border: 1px solid #00d4d4;
+      background-color: transparent;
+      color: white;
+      outline: none;
+      transition: all 0.3s;
+    }
+    
+    input:focus {
+      box-shadow: 0 0 0 2px rgba(0, 212, 212, 0.5);
+    }
+    
+    button {
+      width: 100%;
+      padding: 12px;
+      border-radius: 50px;
+      background-color: #00d4d4;
+      color: black;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      margin-top: 10px;
+    }
+    
+    button:hover {
+      background-color: #00b8b8;
+    }
+    
+    .login-link {
+      text-align: center;
+      margin-top: 20px;
+      color: white;
+    }
+    
+    .login-link a {
+      color: #00d4d4;
+      text-decoration: none;
+    }
+    
+    .login-link a:hover {
+      text-decoration: underline;
+    }
+    
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+      
+      .form-container, .welcome-container {
+        width: 100%;
+      }
+      
+      .welcome-container {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="form-container">
+      <h1>Sign Up</h1>
+      <form id="signupForm">
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input type="text" id="name" placeholder="Enter full name" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" placeholder="Enter email" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" placeholder="Enter password" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="confirmPassword">Confirm Password</label>
+          <input type="password" id="confirmPassword" placeholder="Confirm password" required>
+        </div>
+        
+        <button type="submit">Create Account</button>
+      </form>
+      
+      <div class="login-link">
+        Already have an account? <a href="login.html">Login</a>
+      </div>
+    </div>
+    
+    <div class="welcome-container">
+      <h2>WELCOME</h2>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("signupForm").addEventListener("submit", async function(e) {
+      
+  e.preventDefault();
+  const data = {
+    name: document.getElementById("name").value,
+    email: document.getElementById("email").value,
+    password: document.getElementById("password").value
+  };
+  const res = await fetch("http://localhost:3000/signup", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data)
+  });
+  const text = await res.text();
+  alert(text);
+});
+ 
+
+  </script>
+</body>
+</html>
