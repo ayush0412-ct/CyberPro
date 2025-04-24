@@ -440,6 +440,7 @@ html >
       <h1 class="welcome-title typing-animation">CYBER CROSSWORD</h1>
       <p>Enter your hacker alias to begin the challenge:</p>
       <input type="text" id="player-name" class="welcome-input" placeholder="Enter your name" required>
+      <input type="email" id="player-email" class="welcome-input" placeholder="Enter your email (optional)">
       <button id="start-game" class="start-btn">INITIATE CHALLENGE</button>
     </div>
   </div>
@@ -852,6 +853,7 @@ html >
       // Add to leaderboard
       const playerName = playerNameInput.value.trim();
       const scoreTimerValue = currentScore * timerSeconds;
+      const playerEmail = document.getElementById('player-email').value.trim();
 
       // Add to leaderboard
       leaderboard.push({
@@ -860,6 +862,19 @@ html >
         score: currentScore,
         scoreTimerValue: scoreTimerValue
       });
+
+      // Send result to server
+      fetch("/submit-score", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+        name: playerName,
+        email:playerEmail,
+        score: currentScore,
+        time: timerSeconds
+        })
+      });
+
 
       // Save to localStorage
       localStorage.setItem('crosswordLeaderboard', JSON.stringify(leaderboard));
